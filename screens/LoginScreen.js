@@ -12,7 +12,7 @@ import {
 import { Formik } from "formik";
 import { block } from "react-native-reanimated";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   return (
     <KeyboardAvoidingView>
       <ScrollView>
@@ -23,6 +23,7 @@ const LoginScreen = () => {
           }}
           onSubmit={(formValues) => {
             console.log(formValues);
+            navigation.navigate('Home')
           }}
         >
           {(props) => (
@@ -39,14 +40,21 @@ const LoginScreen = () => {
                   placeholder="Email"
                   placeholderTextColor="#fff"
                   keyboardType="email-address"
+                  onChangeText={props.handleChange("email")}
+                  value={props.values.email}
                 />
                 <TextInput
                   style={styles.inputBox}
                   placeholder="Password"
                   placeholderTextColor="#fff"
                   secureTextEntry={true}
+                  onChangeText={props.handleChange("password")}
+                  value={props.values.password}
                 />
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={props.handleSubmit}
+                >
                   <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
 
@@ -54,7 +62,10 @@ const LoginScreen = () => {
                   <Text style={styles.registerText}>
                     Don't have an account?
                   </Text>
-                  <TouchableOpacity style={styles.registerButton}>
+                  <TouchableOpacity
+                    style={styles.registerButton}
+                    onPress={() => navigation.navigate("Register")}
+                  >
                     <Text>Register</Text>
                   </TouchableOpacity>
                 </View>
@@ -70,6 +81,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
@@ -80,16 +92,17 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   image: {
-    width: 100,
+    width: 150,
     height: 80,
     borderRadius: 15,
   },
   inputBox: {
     width: 300,
+    height: 50,
     backgroundColor: "#b6bfc4",
     borderRadius: 25,
-    padding: 16,
-    fontSize: 16,
+    padding: 14,
+    fontSize: 14,
     marginVertical: 10,
   },
   button: {
@@ -114,11 +127,13 @@ const styles = StyleSheet.create({
   registerText: {
     color: "#738289",
     fontSize: 16,
+    marginLeft: 12,
   },
   registerButton: {
     color: "#738289",
     fontSize: 16,
     fontWeight: "bold",
+    marginLeft: 6,
   },
 });
 export default LoginScreen;
