@@ -8,22 +8,32 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { Formik } from "formik";
-import { block } from "react-native-reanimated";
+import * as yup from "yup";
+
+const formSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().required().min(6),
+});
 
 const LoginScreen = ({ navigation }) => {
   return (
-    <KeyboardAvoidingView>
+    <KeyboardAvoidingView
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
       <ScrollView>
         <Formik
           initialValues={{
             email: "",
             password: "",
           }}
+          validationSchema={formSchema}
           onSubmit={(formValues) => {
             console.log(formValues);
-            navigation.navigate('Home')
+            navigation.navigate("Home");
           }}
         >
           {(props) => (
@@ -42,7 +52,11 @@ const LoginScreen = ({ navigation }) => {
                   keyboardType="email-address"
                   onChangeText={props.handleChange("email")}
                   value={props.values.email}
+                  onBlur={props.handleBlur("email")}
                 />
+                <Text style={styles.errorMessage}>
+                  {props.touched.email && props.errors.email}
+                </Text>
                 <TextInput
                   style={styles.inputBox}
                   placeholder="Password"
@@ -50,7 +64,11 @@ const LoginScreen = ({ navigation }) => {
                   secureTextEntry={true}
                   onChangeText={props.handleChange("password")}
                   value={props.values.password}
+                  onBlur={props.handleBlur("password")}
                 />
+                <Text style={styles.errorMessage}>
+                  {props.touched.password && props.errors.password}
+                </Text>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={props.handleSubmit}
@@ -103,7 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 14,
     fontSize: 14,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   button: {
     width: 300,
@@ -134,6 +152,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 6,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 12,
   },
 });
 export default LoginScreen;
