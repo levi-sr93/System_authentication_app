@@ -20,12 +20,12 @@ function AppNavigator() {
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
-          options={{ headerShown: false }}
+          // options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ headerShown: false, headerLeft: null }}
+          options={{ headerShown: true, headerLeft: null }}
         />
       </Stack.Navigator>
     </NavigationContainer>

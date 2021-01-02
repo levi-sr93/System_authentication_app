@@ -1,33 +1,47 @@
 export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
 export const REGISTER_USER_FAIL = "REGISTER_USER_FAIL";
 export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS";
-export const REGISTER_USER_FAILURE = "REGISTER_USER_FAILURE";
+export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
+
+const BASE_URL = "http://localhost:5000";
 
 export const registerUser = (authData) => {
-  //logic to REGISTER user
-  const { fullName, email, password } = data;
-
-  //dispatch function to register Function
-  //the benefits of this approach is because here we can add logic to make a post to create user
+  const { fullName, email, password } = authData;
 
   return async (dispatch) => {
-    dispatch({
-      type: REGISTER_USER_SUCCESS,
-      payload: 1,
-    });
+    try {
+      const result = await fetch(`${BASE_URL}/api/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName,
+          email,
+          password,
+        }),
+      });
+
+      const resultData = await result.json();
+      console.log(resultData);
+
+
+      dispatch({
+        type: REGISTER_USER_SUCCESS,
+        payload: 1,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 };
 
 export const loginUser = (authData) => {
-  //logic to register user
-  const { email, password } = data;
-
-  //dispatch function to LOGIN Function
-  //the benefits of this approach is because here we can add logic to make a post to create user
+  const { email, password } = authData;
 
   return async (dispatch) => {
     dispatch({
-      type: REGISTER_USER_SUCCESS,
+      type: LOGIN_USER_SUCCESS,
       payload: 1,
     });
   };

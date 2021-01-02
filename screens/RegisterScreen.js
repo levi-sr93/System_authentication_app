@@ -11,8 +11,10 @@ import {
   Platform,
 } from "react-native";
 import { Formik } from "formik";
-
 import * as yup from "yup";
+
+import * as authAction from "../redux/actions/authAction";
+import { useDispatch } from "react-redux";
 
 const formSchema = yup.object({
   fullName: yup.string().required().min(3),
@@ -21,6 +23,8 @@ const formSchema = yup.object({
 });
 
 const RegisterScreen = (navData) => {
+  const dispatch = useDispatch();
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -34,8 +38,14 @@ const RegisterScreen = (navData) => {
           }}
           validationSchema={formSchema}
           onSubmit={(formValues) => {
-            console.log(formValues);
-            navData.navigation.navigate("Home");
+            // console.log(formValues);
+            dispatch(authAction.registerUser(formValues))
+              .then(() => {
+                navData.navigation.navigate("Home");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }}
         >
           {(props) => (
