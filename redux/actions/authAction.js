@@ -9,6 +9,7 @@ export const registerUser = (authData) => {
   const { fullName, email, password } = authData;
 
   return async (dispatch) => {
+    //logic to make a POST to Register User
     try {
       const result = await fetch(`${BASE_URL}/api/users/register`, {
         method: "POST",
@@ -25,7 +26,6 @@ export const registerUser = (authData) => {
       const resultData = await result.json();
       console.log(resultData);
 
-
       dispatch({
         type: REGISTER_USER_SUCCESS,
         payload: 1,
@@ -38,8 +38,22 @@ export const registerUser = (authData) => {
 
 export const loginUser = (authData) => {
   const { email, password } = authData;
-
   return async (dispatch) => {
+    //logic to make a POST to LOGIN
+    const result = await fetch(`${BASE_URL}/api/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const resultData = await result.json();
+    console.log(resultData);
+
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: 1,

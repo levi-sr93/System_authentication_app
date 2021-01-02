@@ -13,12 +13,17 @@ import {
 import { Formik } from "formik";
 import * as yup from "yup";
 
+import * as authAction from "../redux/actions/authAction";
+import { useDispatch } from "react-redux";
+
 const formSchema = yup.object({
   email: yup.string().email().required(),
   password: yup.string().required().min(6),
 });
 
 const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   return (
     <KeyboardAvoidingView
       // behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -32,8 +37,12 @@ const LoginScreen = ({ navigation }) => {
           }}
           validationSchema={formSchema}
           onSubmit={(formValues) => {
-            console.log(formValues);
-            navigation.navigate("Home");
+            // console.log(formValues);
+            dispatch(authAction.loginUser(formValues))
+              .then(() => {
+                navigation.navigate("Home");
+              })
+              .catch((error) => console.log(error));
           }}
         >
           {(props) => (
