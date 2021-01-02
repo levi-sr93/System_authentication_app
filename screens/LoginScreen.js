@@ -17,6 +17,8 @@ import * as yup from "yup";
 import * as authAction from "../redux/actions/authAction";
 import { useDispatch } from "react-redux";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const formSchema = yup.object({
   email: yup.string().email().required(),
   password: yup.string().required().min(6),
@@ -40,10 +42,15 @@ const LoginScreen = ({ navigation }) => {
           onSubmit={(formValues) => {
             // console.log(formValues);
             dispatch(authAction.loginUser(formValues))
-              .then((result) => {
+              .then(async (result) => {
                 console.log(result);
                 if (result.success) {
-                  navigation.navigate("Home");
+                  try {
+                    await AsyncStorage.setItem("token", result.token);
+                    navigation.navigate("Home");
+                  } catch (error) {
+                    console.log(error);
+                  }
                 } else {
                   Alert.alert(result.message);
                 }
