@@ -10,29 +10,34 @@ export const registerUser = (authData) => {
 
   return async (dispatch) => {
     //logic to make a POST to Register User
-    try {
-      const result = await fetch(`${BASE_URL}/api/users/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName,
-          email,
-          password,
-        }),
-      });
+    const result = await fetch(`${BASE_URL}/api/users/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fullName,
+        email,
+        password,
+      }),
+    });
 
-      const resultData = await result.json();
-      console.log(resultData);
+    const resultData = await result.json();
+    // console.log(resultData);
 
+    if (resultData) {
       dispatch({
         type: REGISTER_USER_SUCCESS,
-        payload: 1,
+        payload: resultData,
       });
-    } catch (err) {
-      console.log(err);
+    } else {
+      dispatch({
+        type: REGISTER_USER_FAIL,
+        payload: resultData,
+      });
     }
+
+    return resultData;
   };
 };
 
@@ -54,9 +59,17 @@ export const loginUser = (authData) => {
     const resultData = await result.json();
     console.log(resultData);
 
-    dispatch({
-      type: LOGIN_USER_SUCCESS,
-      payload: 1,
-    });
+    if (resultData.success) {
+      dispatch({
+        type: LOGIN_USER_SUCCESS,
+        payload: resultData,
+      });
+    } else {
+      dispatch({
+        type: LOGIN_USER_FAIL,
+        payload: resultData,
+      });
+    }
+    return resultData;
   };
 };

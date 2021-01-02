@@ -1,6 +1,8 @@
 import {
   REGISTER_USER_SUCCESS,
   LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAIL,
+  REGISTER_USER_FAIL,
 } from "../actions/authAction";
 
 const initialState = {
@@ -9,17 +11,27 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case REGISTER_USER_SUCCESS:
       return {
         ...state,
-        user: action.payload
-      }
-      case LOGIN_USER_SUCCESS:
+        user: action.payload,
+      };
+    case REGISTER_USER_FAIL:
       return {
         ...state,
-        user: action.payload
-      }
+        errors: action.payload,
+      };
+    case LOGIN_USER_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case LOGIN_USER_FAIL:
+      return {
+        ...state,
+        errors: action.payload,
+      };
   }
 
   return state;

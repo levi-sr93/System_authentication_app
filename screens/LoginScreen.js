@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
+  Alert,
 } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -39,8 +40,13 @@ const LoginScreen = ({ navigation }) => {
           onSubmit={(formValues) => {
             // console.log(formValues);
             dispatch(authAction.loginUser(formValues))
-              .then(() => {
-                navigation.navigate("Home");
+              .then((result) => {
+                console.log(result);
+                if (result.success) {
+                  navigation.navigate("Home");
+                } else {
+                  Alert.alert(result.message);
+                }
               })
               .catch((error) => console.log(error));
           }}
